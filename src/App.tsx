@@ -3,6 +3,7 @@ import {
   CalendarDays,
   CheckCircle2,
   ClipboardCheck,
+  FileCheck2,
   GraduationCap,
   Library,
   Mic,
@@ -26,7 +27,7 @@ import {
 } from "./curriculum";
 import { allowedEmail, isSupabaseConfigured, supabase } from "./supabase";
 
-type Tab = "lesson" | "tests" | "calendar" | "report" | "notebook" | "cards" | "speaking";
+type Tab = "lesson" | "tests" | "calendar" | "report" | "notebook" | "cards" | "speaking" | "answers";
 type NoteState = Record<string, string>;
 type AnswerState = Record<string, string>;
 type CardState = Record<string, { box: number; lastReviewed?: string; needsReview?: boolean }>;
@@ -65,6 +66,7 @@ const tabs: TabConfig[] = [
   ["notebook", NotebookPen, "Notebook"],
   ["cards", Library, "Cards"],
   ["speaking", Mic, "Speaking"],
+  ["answers", FileCheck2, "Answers"],
 ];
 
 function gradeFromPercent(percent: number) {
@@ -293,6 +295,14 @@ export function App() {
           : "Upcoming",
     };
   });
+  const trackOrder = Object.keys(grouped);
+
+  function isTrackUnlocked(track: string) {
+    const index = trackOrder.indexOf(track);
+    if (index <= 0) return true;
+    const previousTracks = trackOrder.slice(0, index);
+    return previousTracks.every((previousTrack) => grouped[previousTrack].every((module) => completed.includes(module.id)));
+  }
 
   function toggleComplete(id: number) {
     const module = modules.find((item) => item.id === id);
@@ -587,26 +597,31 @@ export function App() {
           {Object.entries(query ? { Results: filteredModules } : grouped).map(([track, items]) => (
             <section key={track}>
               <h2>{track}</h2>
-              {items.map((module) => (
-                <button
-                  className={module.id === selected.id ? "module-button active" : "module-button"}
-                  key={module.id}
-                  onClick={() => {
-                    setSelectedId(module.id);
-                    setSelectedLesson(0);
-                    setShowHomework(false);
-                    setActiveTab("lesson");
-                    setRevealedCard(null);
-                  }}
-                  type="button"
-                >
-                  <span>{module.id.toString().padStart(2, "0")}</span>
-                  <div>
-                    <strong>{module.title}</strong>
-                    <small>{module.window}</small>
-                  </div>
-                </button>
-              ))}
+              {items.map((module) => {
+                const locked = !isTrackUnlocked(module.track);
+                return (
+                  <button
+                    className={`${module.id === selected.id ? "module-button active" : "module-button"} ${locked ? "locked" : ""}`}
+                    disabled={locked}
+                    key={module.id}
+                    onClick={() => {
+                      setSelectedId(module.id);
+                      setSelectedLesson(0);
+                      setShowHomework(false);
+                      setActiveTab("lesson");
+                      setRevealedCard(null);
+                    }}
+                    title={locked ? "Finish the previous semester first" : module.title}
+                    type="button"
+                  >
+                    <span>{module.id.toString().padStart(2, "0")}</span>
+                    <div>
+                      <strong>{module.title}</strong>
+                      <small>{locked ? "Locked until previous semester is complete" : module.window}</small>
+                    </div>
+                  </button>
+                );
+              })}
             </section>
           ))}
         </nav>
@@ -693,13 +708,9 @@ export function App() {
                 <h4>Purpose</h4>
                 <p>{lesson.objective}</p>
                 {[
-                  ["Prior Knowledge", lesson.priorKnowledge],
-                  ["Key Concepts", lesson.keyConcepts],
                   ["Detailed Explanation", lesson.explanation],
                   ["Examples", lesson.examples],
-                  ["How To Use It", lesson.howToUse],
                   ["Real-Life Application", lesson.realLifeApplication],
-                  ["Demonstration", lesson.demonstration],
                   ["Activities", lesson.activities],
                   ["Assessment", lesson.assessment],
                   ["Summary", lesson.summary],
@@ -1069,6 +1080,39 @@ export function App() {
                 <li>Did you avoid switching back to English?</li>
                 <li>Did you save one correction in the mistake log?</li>
               </ul>
+            </div>
+          </section>
+        )}
+
+        {activeTab === "answers" && (
+          <section className="two-column">
+            <div className="panel">
+              <div className="panel-title">
+                <FileCheck2 size={20} />
+                <h3>Activity Answers</h3>
+              </div>
+              <p className="section-copy">
+                Use this after attempting the activities. These are self-check answers, not shortcuts.
+              </p>
+              <ol className="answer-list">
+                {selected.answerKey.activities.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ol>
+            </div>
+            <div className="panel">
+              <div className="panel-title">
+                <FileCheck2 size={20} />
+                <h3>Homework Answers</h3>
+              </div>
+              <p className="section-copy">
+                Check your homework here after completing the challenge tasks for Module {selected.id}.
+              </p>
+              <ol className="answer-list">
+                {selected.answerKey.homework.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ol>
             </div>
           </section>
         )}

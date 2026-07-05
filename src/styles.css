@@ -282,6 +282,16 @@ meter {
   border-color: #426469;
 }
 
+.module-button.locked {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.module-button.locked:hover {
+  background: transparent;
+  border-color: transparent;
+}
+
 .module-button span {
   color: #e7c67b;
   font-weight: 700;
@@ -852,6 +862,15 @@ meter {
   border: 1px dashed #d5caba;
   border-radius: 8px;
   padding: 12px;
+}
+
+.answer-list {
+  margin: 10px 0 0;
+  padding-left: 22px;
+}
+
+.answer-list li {
+  margin-bottom: 12px;
 }
 
 audio {
