@@ -12,7 +12,7 @@ The private curriculum runs from September 2026 through October 2028 and is orga
 The app includes:
 
 - 70 modules with one structured lesson per module.
-- Each lesson includes purpose, examples or use, activities, and a five-page homework challenge.
+- Each lesson includes purpose, prior knowledge, key concepts, detailed explanation, examples, how to use it, real-life application, demonstration, activities, assessment, summary, and a five-part homework challenge.
 - A month-based test calendar.
 - Interactive test questions with answer keys and rubrics.
 - A weekly study calendar with study days, review days, test prep, and off days.

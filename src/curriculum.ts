@@ -1,9 +1,17 @@
 export type Lesson = {
   title: string;
+  topic: string;
   objective: string;
-  content: string[];
+  priorKnowledge: string[];
+  keyConcepts: string[];
+  explanation: string[];
+  examples: string[];
+  howToUse: string[];
+  realLifeApplication: string[];
+  demonstration: string[];
   activities: string[];
-  practice: string[];
+  assessment: string[];
+  summary: string[];
 };
 
 export type Module = {
@@ -190,42 +198,132 @@ function createLessons(id: number, title: string): Lesson[] {
   return [
     {
       title: `${title} Lesson`,
+      topic: title,
       objective:
         id === 1
           ? "Understand how this course will work and what parts of Samoan you will study."
           : `Understand and use ${title.toLowerCase()} in accurate beginner-to-intermediate Samoan study.`,
-      content: details,
+      priorKnowledge:
+        id === 1
+          ? [
+              "What languages do you already speak, and how did you learn them?",
+              "What parts of language learning feel familiar: sounds, vocabulary, grammar, reading, writing, listening, or speaking?",
+              "Where do you expect to use Samoan: family, travel, culture, church, study, friendship, or everyday conversation?",
+            ]
+          : [
+              `What do you already know about ${title.toLowerCase()} from English or another language you speak?`,
+              "Which words, phrases, or grammar points from earlier modules might connect to this topic?",
+              "What would you need to ask a Samoan speaker to check whether your understanding is natural?",
+            ],
+      keyConcepts:
+        id === 1
+          ? [
+              "The course moves from sounds and letters to words, grammar, sentences, writing, listening, speaking, culture, and practical use.",
+              "Fluency is built through repeated input, output, correction, and review rather than one-time memorization.",
+              "Samoan learning should include respect for culture and awareness that formal speech needs native-speaker guidance.",
+            ]
+          : [
+              `${title} is studied as a usable language skill, not only as a definition to memorize.`,
+              "Accuracy matters: spelling, word order, particles, vowel length, and pronunciation can affect meaning.",
+              "The goal is to recognize the pattern, use it in controlled examples, then use it in your own speech or writing.",
+            ],
+      explanation:
+        id === 1
+          ? [
+              "This module introduces the full learning path. You will first build the foundation: how Samoan is written, how sounds work, how to read simple words, and how to write carefully.",
+              "After the foundation, the course moves into grammar. That includes pronouns, nouns, articles, verbs, tense and aspect markers, adjectives, adverbs, prepositions, conjunctions, questions, negatives, possession, numbers, dates, money, and time.",
+              "The middle of the course focuses on building sentences and writing. You will move from one sentence to five sentences, then paragraphs, descriptions, letters, diary entries, stories, essays, and translation between English and Samoan.",
+              "The final part of the course focuses on listening, speaking, conversation, media, cultural knowledge, formal speech awareness, and practical preparation for Samoa.",
+            ]
+          : [
+              `${title} matters because it gives you another piece of the language system. Instead of treating it as a separate school topic, connect it to real communication: greeting someone, describing a person, asking for help, telling a story, or understanding spoken Samoan.`,
+              "Study the topic in three passes. First, recognize it when you see or hear it. Second, copy trustworthy examples and change one part at a time. Third, produce your own examples and get them corrected.",
+              "When a Samoan example includes macrons or glottal stops in your source, copy them carefully. If your source does not mark them, do not guess; mark the item for later review with a speaker, tutor, dictionary, or trusted learning material.",
+              "For culture-heavy or formal topics, learn recognition before production. It is better to understand when formal or respectful language is being used than to improvise formal speech too early.",
+            ],
+      examples: details,
+      howToUse:
+        id === 1
+          ? [
+              "Use this introduction to set up your notebook, calendar, flashcards, recordings, and correction log.",
+              "Before starting Module 2, write your reason for learning Samoan and decide how often you will study.",
+              "Treat every later module as a cycle: learn, practice, produce, correct, review.",
+            ]
+          : [
+              `Use ${title.toLowerCase()} first in copied examples, then in controlled substitutions, then in original sentences.`,
+              "For speaking, say the example slowly, repeat it naturally, then record yourself without looking.",
+              "For writing, draft short sentences, check them, and keep a corrected version in your notebook.",
+            ],
+      realLifeApplication:
+        id === 1
+          ? [
+              "Planning your learning helps you stay consistent across two years instead of relying on motivation alone.",
+              "The course structure mirrors school learning: modules, lessons, homework, tests, report cards, and review.",
+              "Your real-life goal is not only to pass tests, but to understand and communicate with Samoan speakers respectfully.",
+            ]
+          : [
+              `Use ${title.toLowerCase()} when reading signs, messages, songs, captions, dictionary examples, conversations, and your own writing.`,
+              "Connect the topic to daily life: family, school, food, travel, weather, time, work, church, friends, and personal stories.",
+              "When possible, test your examples with a speaker or tutor and save the correction.",
+            ],
+      demonstration:
+        id === 1
+          ? [
+              "Write the course path as a ladder: sounds -> words -> grammar -> sentences -> writing -> listening -> speaking -> culture -> fluency assessment.",
+              "Create one notebook page titled 'Why I am learning Samoan' and one page titled 'Mistakes I will review'.",
+              "Open the app calendar and identify the current or next scheduled module.",
+            ]
+          : [
+              `Write three lines: Topic: ${title}; Example; My sentence.`,
+              "Copy one example exactly, then replace one word while keeping the structure the same.",
+              "Read the original example and your new version aloud, then mark anything that feels uncertain.",
+            ],
       activities: [
-        "Read the examples aloud and copy them into your notebook.",
-        "Create five original examples that use this module's topic.",
-        "Record one short spoken attempt and save one correction in your mistake log.",
+        `${id}.1 Individual work: write the lesson objective in your own words and explain why this module matters for your fluency goal.`,
+        `${id}.2 Practical demonstration: copy two examples, underline the part connected to ${title.toLowerCase()}, and say each example aloud.`,
+        `${id}.3 Question-and-answer: write five questions you would ask a tutor or native speaker about this module.`,
+        `${id}.4 Active production: create five original examples connected to your real life, then mark the ones that need review.`,
+        `${id}.5 Assessment check: close your notes and write three things you can now explain, plus one thing you still cannot use confidently.`,
       ],
-      practice: [
-        "Use short accurate sentences before attempting longer ones.",
-        "Check spelling, glottal stops, and vowel length where your source provides them.",
-        "Ask a tutor or native speaker to review pronunciation and natural phrasing when possible.",
+      assessment: [
+        "Can you explain the module purpose without reading the lesson?",
+        "Can you identify the topic in at least three examples?",
+        "Can you produce at least three short examples of your own?",
+        "Can you name what needs correction or native-speaker review?",
       ],
-    },
-  ];
+      summary:
+        id === 1
+          ? [
+              "This course will move from foundation skills to grammar, writing, listening, speaking, culture, and readiness for real use.",
+              "Every module should produce evidence: notes, homework, cards, recordings, corrections, or test answers.",
+              "Fluency will require consistency, correction, and real input from Samoan speakers and media.",
+            ]
+          : [
+              `${title} is one part of the larger system you are building.`,
+              "The learning cycle is recognition, controlled practice, original use, correction, and review.",
+              "Keep examples short and accurate, and move uncertain items into your review list.",
+            ],
+      },
+    ];
 }
 
 function createHomework(id: number, title: string): string[] {
   if (id === 1) {
     return [
-      "Page 1 - Challenge for you: write a one-page personal learning contract explaining why you want to learn Samoan and what fluency will mean for you.",
-      "Page 2 - Challenge for you: map the full course from September 2026 to October 2028 and write one goal for each semester.",
-      "Page 3 - Challenge for you: create a study routine for one normal week, including review, speaking, listening, and rest.",
-      "Page 4 - Challenge for you: list the tools you will use: notebook, flashcards, recordings, native speaker practice, and correction log.",
-      "Page 5 - Challenge for you: write a baseline reflection in English: what you already know, what feels difficult, and how you will measure progress.",
+      `${id}.H1 Challenge for you: write a one-page learning contract explaining why you want to learn Samoan, where you hope to use it, and what fluency will mean by October 2028.`,
+      `${id}.H2 Challenge for you: create a course map from September 2026 to October 2028. For each semester, write one skill goal and one evidence goal.`,
+      `${id}.H3 Challenge for you: design your personal study system: notebook sections, flashcard review, recording routine, correction log, and native-speaker practice plan.`,
+      `${id}.H4 Challenge for you: write a baseline self-assessment. Rate your current reading, writing, listening, speaking, pronunciation, grammar, and cultural knowledge from 1 to 5.`,
+      `${id}.H5 Challenge for you: prepare for Module 2 by listing what you already know about alphabets, sounds, pronunciation, spelling, and why careful writing matters.`,
     ];
   }
 
   return [
-    `Page 1 - Challenge for you: write a clear explanation of ${title.toLowerCase()} in your own words, then add five Samoan examples from the lesson or a trusted source.`,
-    `Page 2 - Challenge for you: create a two-column drill for ${title.toLowerCase()} with 15 English prompts and your Samoan attempts.`,
-    "Page 3 - Challenge for you: write ten original sentences about your real life. Keep them short, accurate, and easy to check.",
-    "Page 4 - Challenge for you: record yourself reading your best five sentences, then write down every pronunciation or confidence issue you notice.",
-    "Page 5 - Challenge for you: correct the work, add at least five weak items to flashcards, and write a short reflection on what to review next week.",
+    `${id}.H1 Challenge for you: reinforce the lesson by writing a detailed explanation of ${title.toLowerCase()} in your own words, then add five examples from the lesson or another trusted source.`,
+    `${id}.H2 Challenge for you: create a manageable independent drill with 15 prompts. Include easy, medium, and difficult items so you can build confidence and stretch yourself.`,
+    `${id}.H3 Challenge for you: apply the module to real life. Write ten short examples about your family, school, work, food, travel, weather, time, or personal routine.`,
+    `${id}.H4 Challenge for you: assess understanding. Make a five-question quiz for yourself, answer it without notes, then mark what was correct, uncertain, or wrong.`,
+    `${id}.H5 Challenge for you: prepare for future learning. Add weak items to flashcards, record a short spoken sample, and write one question to ask a native speaker or tutor.`,
   ];
 }
 

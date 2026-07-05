@@ -692,18 +692,27 @@ export function App() {
                 </div>
                 <h4>Purpose</h4>
                 <p>{lesson.objective}</p>
-                <h4>Examples / Using It</h4>
-                <ul>
-                  {lesson.content.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <h4>Activities</h4>
-                <ul>
-                  {lesson.activities.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
+                {[
+                  ["Prior Knowledge", lesson.priorKnowledge],
+                  ["Key Concepts", lesson.keyConcepts],
+                  ["Detailed Explanation", lesson.explanation],
+                  ["Examples", lesson.examples],
+                  ["How To Use It", lesson.howToUse],
+                  ["Real-Life Application", lesson.realLifeApplication],
+                  ["Demonstration", lesson.demonstration],
+                  ["Activities", lesson.activities],
+                  ["Assessment", lesson.assessment],
+                  ["Summary", lesson.summary],
+                ].map(([heading, items]) => (
+                  <section className="lesson-section" key={heading as string}>
+                    <h4>{heading as string}</h4>
+                    <ul>
+                      {(items as string[]).map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </section>
+                ))}
                 <button className="homework-toggle" onClick={() => setShowHomework((value) => !value)} type="button">
                   {showHomework ? "Hide homework" : "Homework"}
                 </button>

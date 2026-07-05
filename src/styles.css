@@ -506,6 +506,16 @@ meter {
   color: #9a5f2b;
 }
 
+.lesson-section {
+  border-top: 1px solid #e7ddcf;
+  margin-top: 18px;
+  padding-top: 4px;
+}
+
+.lesson-section ul {
+  max-width: 980px;
+}
+
 .lesson-card p {
   color: #526064;
   margin-top: 6px;
