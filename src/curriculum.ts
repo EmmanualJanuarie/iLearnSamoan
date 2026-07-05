@@ -212,14 +212,30 @@ const lessonPacks: Record<number, Partial<Lesson>> = {
     ],
   },
   2: {
-    objective: "Recognize the core Samoan alphabet and understand that several letters are pronounced differently from English.",
+    objective: "Learn the Samoan alphabet and pronounce every core letter clearly.",
     explanation: [
+      "The core Samoan alphabet taught to beginners has 14 letters.",
       "Modern Samoan uses a Latin-based alphabet. The common native-letter set is usually taught as five vowels and nine consonants: a, e, i, o, u, f, g, l, m, n, p, s, t, v.",
       "The letters h, k, and r may appear in loanwords or certain contexts, but the core beginner alphabet should be learned first.",
       "The Samoan letter g is pronounced like the ng sound in English singer, not like the g in go.",
       "Samoan spelling is more sound-based than English spelling. Careful pronunciation begins with learning the letter sounds clearly.",
     ],
-    examples: ["a, e, i, o, u", "f, g, l, m, n, p, s, t, v", "g = ng sound, as in the middle/end of singer"],
+    examples: [
+      "A - ah - aso means day",
+      "E - eh - eleele means earth or dirt",
+      "I - ee - i'a means fish",
+      "O - oh - ofa/alofa means love",
+      "U - oo - ula means necklace or red",
+      "F - f - fale means house",
+      "G - ng - gagana means language",
+      "L - l - lima means hand or five",
+      "M - m - mata means eye or face",
+      "N - n - nuu means village",
+      "P - p - povi means cow",
+      "S - s - sami means sea",
+      "T - t - tama means boy or father",
+      "V - v - vai means water",
+    ],
     realLifeApplication: [
       "The alphabet helps you read names, signs, songs, prayers, subtitles, and dictionary entries.",
       "Recognizing letters accurately prevents you from building bad pronunciation habits early.",
@@ -247,7 +263,7 @@ const lessonPacks: Record<number, Partial<Lesson>> = {
       "A macron over a vowel marks a long vowel: ā, ē, ī, ō, ū. A long vowel is held longer than a short vowel.",
       "The glottal stop is a catch or break in the voice. In Samoan learning materials it may be shown with a turned comma or apostrophe.",
       "Some sources mark macrons and glottal stops carefully, while casual writing may omit them. As a learner, copy the marks when your source provides them.",
-      "Do not guess marks from memory. If unsure, mark the word for review with a dictionary, teacher, tutor, or native speaker.",
+      "Do not guess marks from memory. If unsure, mark the word for review and check it against a reliable dictionary or course source.",
     ],
     examples: ["a versus ā", "o versus ō", "fa'a often shows a glottal stop after fa"],
     realLifeApplication: [
@@ -299,22 +315,143 @@ const lessonPacks: Record<number, Partial<Lesson>> = {
   },
 };
 
+function createActivities(id: number, title: string): string[] {
+  const fallback = [
+    `${id}.1 Read the examples aloud three times. Cover the English and try to remember the meaning.`,
+    `${id}.2 Copy five examples and underline the word or pattern that belongs to this module.`,
+    `${id}.3 Match five Samoan items from the lesson with their English meanings.`,
+    `${id}.4 Write five short original examples using only words or patterns you have already studied.`,
+    `${id}.5 Complete a self-check: mark each example as easy, unsure, or needs review.`,
+  ];
+
+  const byId: Record<number, string[]> = {
+    1: [
+      "1.1 Read the two introduction paragraphs aloud once.",
+      "1.2 Circle the skills you will study first: alphabet, sounds, long vowels, glottal stop, syllables.",
+      "1.3 Put these course stages in order: speaking, alphabet, sentences, listening, syllables.",
+      "1.4 Write one sentence saying what you want to do with Samoan by October 2028.",
+      "1.5 Choose the first three habits you will use: notebook, flashcards, recording, review, tests.",
+    ],
+    2: [
+      "2.1 Read the Samoan alphabet aloud three times: A E I O U F G L M N P S T V.",
+      "2.2 Separate these letters into vowels and consonants: A M O T U F E.",
+      "2.3 Circle every vowel in these words: TALO, FALE, SAMOA, ALOFA.",
+      "2.4 Read these words aloud: fale, tama, sami, vai, alofa.",
+      "2.5 Write each Samoan letter five times while saying its sound.",
+    ],
+    3: [
+      "3.1 Say each vowel clearly: a, e, i, o, u.",
+      "3.2 Read these syllables aloud: ma, me, mi, mo, mu.",
+      "3.3 Read these syllables aloud with f: fa, fe, fi, fo, fu.",
+      "3.4 Practise g as ng: ga, ge, gi, go, gu.",
+      "3.5 Record yourself reading: mala, fale, sami, tagata, gagana.",
+    ],
+    4: [
+      "4.1 Read each pair and hold the marked vowel longer: a / ā, e / ē, i / ī, o / ō, u / ū.",
+      "4.2 Put a check next to the words that show a glottal stop: fa'a, i'a, tama, alofa.",
+      "4.3 Clap once for each syllable in: fa'a-fe-tai, i'a, Sa-mo-a.",
+      "4.4 Copy these marks carefully: ā, ē, ī, ō, ū, '.",
+      "4.5 Read aloud slowly: fa'a Samoa, i'a, fa'afetai.",
+    ],
+    5: [
+      "5.1 Break these words into syllables: talofa, Samoa, alofa, faafetai.",
+      "5.2 Read each syllable separately, then read the whole word.",
+      "5.3 Count the syllables in: tama, fale, tagata, faamolemole.",
+      "5.4 Write five Samoan words and draw slashes between syllables.",
+      "5.5 Read your five words aloud without rushing the final vowel.",
+    ],
+    9: [
+      "9.1 Match pronouns: a'u, oe, ia, matou, tatou, outou, latou.",
+      "9.2 Choose matou or tatou: 'we, including you' and 'we, excluding you'.",
+      "9.3 Circle the pronoun in: O a'u o se tagata aoga.",
+      "9.4 Replace the English pronoun with Samoan: I, you, they, we including you.",
+      "9.5 Write five short labels: a'u = I, oe = you, etc.",
+    ],
+    11: [
+      "11.1 Match the sentence to time: Ou te alu, Na ou alu, O le a ou alu.",
+      "11.2 Circle the verb in each sentence: alu, sau, faitau.",
+      "11.3 Change 'Ou te alu' to past using Na.",
+      "11.4 Change 'Na ou alu' to future using O le a.",
+      "11.5 Read all three model sentences aloud until they feel automatic.",
+    ],
+  };
+
+  if (title.includes("Question")) {
+    return [
+      `${id}.1 Match: O ai? = who, O fea? = where, O afea? = when, E fia? = how many/how much.`,
+      `${id}.2 Choose the correct question phrase for a person, place, time, and number.`,
+      `${id}.3 Turn three English prompts into Samoan question prompts using the lesson examples.`,
+      `${id}.4 Read the questions aloud and mark the word that makes it a question.`,
+      `${id}.5 Answer each question in English to prove you understand it.`,
+    ];
+  }
+
+  if (title.includes("Numbers")) {
+    return [
+      `${id}.1 Write numbers 1-10 in Samoan from your notes.`,
+      `${id}.2 Match numbers to prices, dates, and times.`,
+      `${id}.3 Read five numbers aloud slowly.`,
+      `${id}.4 Write three pretend prices and three pretend dates.`,
+      `${id}.5 Check whether each number is useful for travel, shopping, or time.`,
+    ];
+  }
+
+  return fallback;
+}
+
+function createAssessment(id: number, title: string): string[] {
+  const byId: Record<number, string[]> = {
+    2: [
+      "Can you name all 14 core Samoan letters?",
+      "Can you separate vowels from consonants?",
+      "Can you pronounce g as ng?",
+      "Can you identify vowels inside simple Samoan words?",
+      "Can you read five simple words aloud?",
+    ],
+    3: [
+      "Can you pronounce all five vowels clearly?",
+      "Can you read ma, me, mi, mo, mu without changing the vowel sounds?",
+      "Can you pronounce g as ng in gagana?",
+      "Can you hear the difference between careful and rushed pronunciation?",
+      "Can you read five beginner words aloud?",
+    ],
+    9: [
+      "Can you identify a'u, oe, ia, matou, tatou, outou, and latou?",
+      "Can you explain the difference between matou and tatou?",
+      "Can you choose the right pronoun for I, you, and they?",
+      "Can you spot a pronoun in a simple sentence?",
+      "Can you make five pronoun flashcards?",
+    ],
+  };
+
+  return (
+    byId[id] ?? [
+      `Can you recognize ${title.toLowerCase()} in lesson examples?`,
+      `Can you match ${title.toLowerCase()} examples to their meanings?`,
+      `Can you complete five practice items about ${title.toLowerCase()}?`,
+      "Can you correct one mistake from your own work?",
+      "Can you move weak items into weekly review?",
+    ]
+  );
+}
+
 function createLessons(id: number, title: string): Lesson[] {
   const pack = lessonPacks[id];
   const details = topicDetails[id] ?? [
-    `Define the role of ${title.toLowerCase()} in Samoan communication.`,
-    "Collect ten trustworthy examples from a dictionary, textbook, tutor, song, show, or native speaker.",
-    "Turn the examples into active recall cards and original sentences.",
+    `${title} helps you understand or produce a specific part of Samoan communication.`,
+    "The lesson examples should be copied exactly before you create your own examples.",
+    "Use the examples to practise recognition first, then production.",
   ];
 
   return [
     {
       title: `${title} Lesson`,
       topic: title,
-      objective: pack?.objective ??
-        id === 1
-          ? "Understand how this course will work and what parts of Samoan you will study."
-          : `Understand and use ${title.toLowerCase()} in accurate beginner-to-intermediate Samoan study.`,
+      objective:
+        pack?.objective ??
+        (id === 1
+          ? "Understand what Samoan is and what this course will teach first."
+          : `Learn ${title.toLowerCase()} well enough to recognize it, practise it, and use it in simple Samoan tasks.`),
       priorKnowledge:
         id === 1
           ? [
@@ -350,7 +487,7 @@ function createLessons(id: number, title: string): Lesson[] {
           : [
               `${title} matters because it gives you another piece of the language system. Instead of treating it as a separate school topic, connect it to real communication: greeting someone, describing a person, asking for help, telling a story, or understanding spoken Samoan.`,
               "Study the topic in three passes. First, recognize it when you see or hear it. Second, copy trustworthy examples and change one part at a time. Third, produce your own examples and get them corrected.",
-              "When a Samoan example includes macrons or glottal stops in your source, copy them carefully. If your source does not mark them, do not guess; mark the item for later review with a speaker, tutor, dictionary, or trusted learning material.",
+              "When a Samoan example includes macrons or glottal stops in your source, copy them carefully. If your source does not mark them, do not guess; mark the item for later dictionary or course-material review.",
               "For culture-heavy or formal topics, learn recognition before production. It is better to understand when formal or respectful language is being used than to improvise formal speech too early.",
             ],
       examples: pack?.examples ?? details,
@@ -364,7 +501,7 @@ function createLessons(id: number, title: string): Lesson[] {
           : [
               `Use ${title.toLowerCase()} when reading signs, messages, songs, captions, dictionary examples, conversations, and your own writing.`,
               "Connect the topic to daily life: family, school, food, travel, weather, time, work, church, friends, and personal stories.",
-              "When possible, test your examples with a speaker or tutor and save the correction.",
+              "Use this topic in short tasks first so you can check your own understanding before moving to harder examples.",
             ],
       demonstration:
         id === 1
@@ -378,19 +515,8 @@ function createLessons(id: number, title: string): Lesson[] {
               "Copy one example exactly, then replace one word while keeping the structure the same.",
               "Read the original example and your new version aloud, then mark anything that feels uncertain.",
             ],
-      activities: [
-        `${id}.1 Individual work: write the lesson objective in your own words and explain why this module matters for your fluency goal.`,
-        `${id}.2 Practical demonstration: copy two examples, underline the part connected to ${title.toLowerCase()}, and say each example aloud.`,
-        `${id}.3 Question-and-answer: write five questions you would ask a tutor or native speaker about this module.`,
-        `${id}.4 Active production: create five original examples connected to your real life, then mark the ones that need review.`,
-        `${id}.5 Assessment check: close your notes and write three things you can now explain, plus one thing you still cannot use confidently.`,
-      ],
-      assessment: [
-        "Can you explain the module purpose without reading the lesson?",
-        "Can you identify the topic in at least three examples?",
-        "Can you produce at least three short examples of your own?",
-        "Can you name what needs correction or native-speaker review?",
-      ],
+      activities: createActivities(id, title),
+      assessment: createAssessment(id, title),
       summary:
         id === 1
           ? [
@@ -408,41 +534,178 @@ function createLessons(id: number, title: string): Lesson[] {
 }
 
 function createHomework(id: number, title: string): string[] {
-  if (id === 1) {
-    return [
-      `${id}.H1 Challenge for you: write a one-page learning contract explaining why you want to learn Samoan, where you hope to use it, and what fluency will mean by October 2028.`,
-      `${id}.H2 Challenge for you: create a course map from September 2026 to October 2028. For each semester, write one skill goal and one evidence goal.`,
-      `${id}.H3 Challenge for you: design your personal study system: notebook sections, flashcard review, recording routine, correction log, and native-speaker practice plan.`,
-      `${id}.H4 Challenge for you: write a baseline self-assessment. Rate your current reading, writing, listening, speaking, pronunciation, grammar, and cultural knowledge from 1 to 5.`,
-      `${id}.H5 Challenge for you: prepare for Module 2 by listing what you already know about alphabets, sounds, pronunciation, spelling, and why careful writing matters.`,
-    ];
-  }
+  const byId: Record<number, string[]> = {
+    1: [
+      "1.H1 Homework: write the course stages in order: alphabet, sounds, syllables, words, grammar, sentences, listening, speaking.",
+      "1.H2 Homework: write one sentence explaining what Gagana Samoa means.",
+      "1.H3 Homework: choose three study tools you will use from this app.",
+      "1.H4 Homework: write the start and end dates of the course.",
+      "1.H5 Challenge for you: write three reasons you want to learn Samoan.",
+    ],
+    2: [
+      "2.H1 Homework: write the Samoan alphabet twice.",
+      "2.H2 Homework: separate these letters into vowels and consonants: A F I L O S U V.",
+      "2.H3 Homework: circle the vowels in these words: FALE, TAMA, SAMI, ALOFA, VAI.",
+      "2.H4 Homework: read these ten words aloud: fale, tama, sami, vai, alofa, aso, i'a, ula, eleele, Samoa.",
+      "2.H5 Challenge for you: record yourself saying the alphabet and the ten words.",
+    ],
+    3: [
+      "3.H1 Homework: read each vowel sound five times: a, e, i, o, u.",
+      "3.H2 Homework: read the syllable rows ma/me/mi/mo/mu and fa/fe/fi/fo/fu.",
+      "3.H3 Homework: write five words that contain the letter g.",
+      "3.H4 Homework: record yourself saying gagana, tagata, logo, gofie, galo.",
+      "3.H5 Challenge for you: listen to your recording and write which sound was hardest.",
+    ],
+    4: [
+      "4.H1 Homework: copy ā, ē, ī, ō, ū ten times each.",
+      "4.H2 Homework: mark which words contain a glottal stop: fa'a, tama, i'a, fale, fa'afetai.",
+      "4.H3 Homework: read fa'a, i'a, and fa'afetai aloud five times.",
+      "4.H4 Homework: write two short notes: what a macron does and what a glottal stop does.",
+      "4.H5 Challenge for you: find three Samoan words online or in notes that show a glottal stop.",
+    ],
+    5: [
+      "5.H1 Homework: split talofa, Samoa, alofa, tama, and faafetai into syllables.",
+      "5.H2 Homework: count the syllables in fale, tagata, faamolemole, aso, and vai.",
+      "5.H3 Homework: read each word one syllable at a time, then as a whole word.",
+      "5.H4 Homework: write five new Samoan words and divide them into syllables.",
+      "5.H5 Challenge for you: record yourself reading all ten words smoothly.",
+    ],
+    9: [
+      "9.H1 Homework: match a'u, oe, ia, matou, tatou, outou, latou to English meanings.",
+      "9.H2 Homework: choose matou or tatou for 'we including you' and 'we excluding you'.",
+      "9.H3 Homework: circle the pronoun in five simple sentences from the lesson or notes.",
+      "9.H4 Homework: make seven pronoun flashcards.",
+      "9.H5 Challenge for you: write five English sentences and replace the pronoun with Samoan.",
+    ],
+    11: [
+      "11.H1 Homework: match Ou te alu, Na ou alu, O le a ou alu to present, past, and future.",
+      "11.H2 Homework: change Ou te sau into past and future.",
+      "11.H3 Homework: circle the verb in alu, sau, faitau sentence examples.",
+      "11.H4 Homework: write three sentences using alu, sau, and faitau.",
+      "11.H5 Challenge for you: record the three tense patterns without reading the English.",
+    ],
+  };
 
-  return [
-    `${id}.H1 Challenge for you: reinforce the lesson by writing a detailed explanation of ${title.toLowerCase()} in your own words, then add five examples from the lesson or another trusted source.`,
-    `${id}.H2 Challenge for you: create a manageable independent drill with 15 prompts. Include easy, medium, and difficult items so you can build confidence and stretch yourself.`,
-    `${id}.H3 Challenge for you: apply the module to real life. Write ten short examples about your family, school, work, food, travel, weather, time, or personal routine.`,
-    `${id}.H4 Challenge for you: assess understanding. Make a five-question quiz for yourself, answer it without notes, then mark what was correct, uncertain, or wrong.`,
-    `${id}.H5 Challenge for you: prepare for future learning. Add weak items to flashcards, record a short spoken sample, and write one question to ask a native speaker or tutor.`,
-  ];
+  return (
+    byId[id] ?? [
+      `${id}.H1 Homework: copy five lesson examples and write the English meaning beside each one.`,
+      `${id}.H2 Homework: complete five matching items using the module's words or patterns.`,
+      `${id}.H3 Homework: write five short Samoan attempts using this module's skill.`,
+      `${id}.H4 Homework: correct your five attempts using the lesson examples as your guide.`,
+      `${id}.H5 Challenge for you: create five flashcards from the items you missed or forgot.`,
+    ]
+  );
 }
 
 function createAnswerKey(id: number, title: string): Module["answerKey"] {
+  const practicalDefaults = {
+    activities: [
+      `${id}.1 Answer: all lesson examples were read aloud and meanings checked.`,
+      `${id}.2 Answer: five examples were copied and the module pattern was marked.`,
+      `${id}.3 Answer: five matching items were completed using the lesson meanings.`,
+      `${id}.4 Answer: five short attempts were written using known words or patterns.`,
+      `${id}.5 Answer: each item was marked easy, unsure, or needs review.`,
+    ],
+    homework: [
+      `${id}.H1 Answer: five lesson examples copied with English meanings.`,
+      `${id}.H2 Answer: five matching items completed from the module content.`,
+      `${id}.H3 Answer: five short Samoan attempts written.`,
+      `${id}.H4 Answer: attempts checked against the examples; errors marked.`,
+      `${id}.H5 Answer: five weak items added to cards or weekly review.`,
+    ],
+  };
+
+  if (id === 1) {
+    return {
+      activities: [
+        "1.1 Answer: read the two introduction paragraphs.",
+        "1.2 Answer: alphabet, sounds, long vowels, glottal stop, syllables.",
+        "1.3 Answer: alphabet -> syllables -> sentences -> listening -> speaking.",
+        "1.4 Sample answer: I want to understand and speak everyday Samoan by October 2028.",
+        "1.5 Sample answer: notebook, flashcards, recording.",
+      ],
+      homework: [
+        "1.H1 Answer: alphabet, sounds, syllables, words, grammar, sentences, listening, speaking.",
+        "1.H2 Answer: Gagana Samoa means the Samoan language.",
+        "1.H3 Sample answer: cards, notebook, speaking recorder.",
+        "1.H4 Answer: September 2026 to October 2028.",
+        "1.H5 Any clear personal reasons are acceptable.",
+      ],
+    };
+  }
+
   if (id === 2) {
     return {
       activities: [
-        "2.1 Expected answer: the core beginner alphabet includes a, e, i, o, u, f, g, l, m, n, p, s, t, v.",
-        "2.2 Expected answer: vowels are a, e, i, o, u; consonants include f, g, l, m, n, p, s, t, v.",
-        "2.3 Expected answer: g should be described as an ng sound, like singer.",
-        "2.4 Expected answer: examples should use real Samoan-looking syllables such as ma, la, ta, sa, mo, lu.",
-        "2.5 Expected answer: you should be able to name the letters and identify vowels separately from consonants.",
+        "2.1 Answer: A E I O U F G L M N P S T V.",
+        "2.2 Answer: vowels A O U E; consonants M T F.",
+        "2.3 Answer: TALO has A O; FALE has A E; SAMOA has A O A; ALOFA has A O A.",
+        "2.4 Self-check: fale, tama, sami, vai, alofa were read aloud with clear vowels.",
+        "2.5 Self-check: all 14 letters written five times.",
       ],
       homework: [
-        "2.H1 Answer: a, e, i, o, u, f, g, l, m, n, p, s, t, v.",
-        "2.H2 Answer: vowels are a, e, i, o, u. Consonants are f, g, l, m, n, p, s, t, v.",
-        "2.H3 Answer: g is pronounced like ng in singer.",
-        "2.H4 Sample answer: ma, me, mi, mo, mu; fa, fe, fi, fo, fu.",
-        "2.H5 Self-check: all letters copied clearly, vowels identified, g/ng noted, uncertain items marked for review.",
+        "2.H1 Answer: A E I O U F G L M N P S T V, written twice.",
+        "2.H2 Answer: vowels A I O U; consonants F L S V.",
+        "2.H3 Answer: FALE = A E; TAMA = A A; SAMI = A I; ALOFA = A O A; VAI = A I.",
+        "2.H4 Self-check: all ten words read aloud.",
+        "2.H5 Self-check: recording includes alphabet and ten words.",
+      ],
+    };
+  }
+
+  if (id === 3) {
+    return {
+      activities: [
+        "3.1 Answer: a, e, i, o, u were pronounced clearly.",
+        "3.2 Self-check: ma, me, mi, mo, mu were read with different vowel sounds.",
+        "3.3 Self-check: fa, fe, fi, fo, fu were read clearly.",
+        "3.4 Answer: g is pronounced ng, not hard English g.",
+        "3.5 Self-check: recording includes mala, fale, sami, tagata, gagana.",
+      ],
+      homework: [
+        "3.H1 Self-check: each vowel read five times.",
+        "3.H2 Self-check: both syllable rows read aloud.",
+        "3.H3 Sample answers: gagana, tagata, galo, logo, gofie.",
+        "3.H4 Self-check: recording saved.",
+        "3.H5 Any honest difficulty note is acceptable.",
+      ],
+    };
+  }
+
+  if (id === 4) {
+    return {
+      activities: [
+        "4.1 Answer: marked vowels are held longer.",
+        "4.2 Answer: fa'a and i'a show glottal stops.",
+        "4.3 Answer: fa'a-fe-tai = 3; i'a = 2; Sa-mo-a = 3.",
+        "4.4 Self-check: ā, ē, ī, ō, ū, and ' copied accurately.",
+        "4.5 Self-check: glottal stop heard as a small break.",
+      ],
+      homework: [
+        "4.H1 Self-check: each marked vowel copied ten times.",
+        "4.H2 Answer: fa'a, i'a, fa'afetai.",
+        "4.H3 Self-check: fa'a, i'a, and fa'afetai read five times.",
+        "4.H4 Answer: macron lengthens a vowel; glottal stop creates a small break.",
+        "4.H5 Answers vary; words should visibly include a glottal mark.",
+      ],
+    };
+  }
+
+  if (id === 5) {
+    return {
+      activities: [
+        "5.1 Answer: ta-lo-fa; Sa-mo-a; a-lo-fa; fa-a-fe-tai.",
+        "5.2 Self-check: each word read by syllable, then whole.",
+        "5.3 Answer: tama = 2; fale = 2; tagata = 3; faamolemole = 6.",
+        "5.4 Answers vary; each word should show syllable breaks.",
+        "5.5 Self-check: final vowels were not swallowed.",
+      ],
+      homework: [
+        "5.H1 Answer: ta-lo-fa; Sa-mo-a; a-lo-fa; ta-ma; fa-a-fe-tai.",
+        "5.H2 Answer: fale = 2; tagata = 3; faamolemole = 6; aso = 2; vai = 1.",
+        "5.H3 Self-check: syllable then whole-word reading completed.",
+        "5.H4 Answers vary; syllable divisions should be reasonable.",
+        "5.H5 Self-check: recording saved.",
       ],
     };
   }
@@ -485,22 +748,7 @@ function createAnswerKey(id: number, title: string): Module["answerKey"] {
     };
   }
 
-  return {
-    activities: [
-      `${id}.1 A complete answer explains the module purpose in simple words and connects it to Samoan communication.`,
-      `${id}.2 A complete answer copies two examples, marks the target feature, and reads them aloud clearly.`,
-      `${id}.3 A complete answer gives five useful comprehension questions about the topic.`,
-      `${id}.4 A complete answer gives five original examples and marks uncertain items honestly.`,
-      `${id}.5 A complete answer lists three things understood and one specific point for review.`,
-    ],
-    homework: [
-      `${id}.H1 A strong answer explains ${title.toLowerCase()} and includes five relevant examples.`,
-      `${id}.H2 A strong answer includes 15 prompts with easy, medium, and difficult sections.`,
-      `${id}.H3 A strong answer uses real-life topics and short checkable sentences.`,
-      `${id}.H4 A strong answer includes a five-question self-quiz and marks correct, uncertain, and wrong answers.`,
-      `${id}.H5 A strong answer adds weak items to flashcards and writes one next-step review question.`,
-    ],
-  };
+  return practicalDefaults;
 }
 
 export const modules: Module[] = modulePlan.map(([id, title, track, window]) => ({
