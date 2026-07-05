@@ -798,6 +798,53 @@ meter {
   min-height: 48px;
 }
 
+.review-bank {
+  border-top: 1px solid #e7ddcf;
+  margin-top: 22px;
+  padding-top: 20px;
+}
+
+.review-bank article {
+  border: 1px solid #ddd4c6;
+  border-radius: 8px;
+  background: #fffaf2;
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.review-bank h3,
+.review-bank h4 {
+  margin: 0 0 8px;
+}
+
+.review-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.review-chip-list span {
+  display: grid;
+  gap: 2px;
+  border: 1px solid #d5caba;
+  border-radius: 8px;
+  background: #fffdf8;
+  color: #526064;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.review-chip-list strong {
+  color: #173236;
+}
+
+.empty-state {
+  color: #526064;
+  border: 1px dashed #d5caba;
+  border-radius: 8px;
+  padding: 12px;
+}
+
 audio {
   display: block;
   width: 100%;

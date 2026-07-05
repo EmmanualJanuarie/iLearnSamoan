@@ -29,7 +29,7 @@ import { allowedEmail, isSupabaseConfigured, supabase } from "./supabase";
 type Tab = "lesson" | "tests" | "calendar" | "report" | "notebook" | "cards" | "speaking";
 type NoteState = Record<string, string>;
 type AnswerState = Record<string, string>;
-type CardState = Record<string, { box: number; lastReviewed?: string }>;
+type CardState = Record<string, { box: number; lastReviewed?: string; needsReview?: boolean }>;
 type LessonCompletionState = Record<string, number[]>;
 type TabConfig = [Tab, LucideIcon, string];
 type CalendarDay = {
@@ -79,10 +79,10 @@ function semesterExams(track: string) {
   const semesterNumber = track.match(/Semester (\d)/)?.[1];
   if (!semesterNumber) return exams.filter((exam) => exam.month === "October 2028");
   const examMap: Record<string, string[]> = {
-    "1": ["December 2026", "March 2027"],
-    "2": ["June 2027", "September 2027"],
-    "3": ["December 2027", "March 2028"],
-    "4": ["June 2028", "July 2028"],
+    "1": ["November 2026", "February 2027"],
+    "2": ["May 2027", "August 2027"],
+    "3": ["November 2027", "February 2028"],
+    "4": ["May 2028", "July 2028"],
     "5": ["August 2028"],
     "6": ["September 2028"],
   };
@@ -260,6 +260,12 @@ export function App() {
   const progress = Math.round((completed.length / modules.length) * 100);
   const semesterCards = starterFlashcards.filter((card) => card.track === selected.track);
   const dueCards = semesterCards.filter((card) => (cardState[card.id]?.box ?? 0) < 3);
+  const weeklyReviewCards = starterFlashcards.filter((card) => cardState[card.id]?.needsReview);
+  const weeklyReviewByCategory = weeklyReviewCards.reduce<Record<string, typeof starterFlashcards>>((acc, card) => {
+    acc[card.category] ??= [];
+    acc[card.category].push(card);
+    return acc;
+  }, {});
   const selectedLessonCompletions = lessonCompletions[selected.id] ?? [];
   const selectedModuleLessonsComplete = selected.lessons.every((_item, index) =>
     selectedLessonCompletions.includes(index),
@@ -411,7 +417,10 @@ export function App() {
 
   function gradeCard(cardId: string, remembered: boolean) {
     const nextBox = remembered ? Math.min((cardState[cardId]?.box ?? 0) + 1, 3) : 0;
-    const next = { ...cardState, [cardId]: { box: nextBox, lastReviewed: new Date().toISOString() } };
+    const next = {
+      ...cardState,
+      [cardId]: { box: nextBox, lastReviewed: new Date().toISOString(), needsReview: !remembered },
+    };
     setCardState(next);
     saveJson(storage.cards, next);
   }
@@ -523,7 +532,7 @@ export function App() {
           <GraduationCap size={26} />
           <div>
             <h1>iLearn Samoan</h1>
-            <p>October 2026 to October 2028</p>
+            <p>September 2026 to October 2028</p>
           </div>
         </div>
 
@@ -608,7 +617,7 @@ export function App() {
             <h2>{selected.title}</h2>
             <p>
               A private school-style Samoan course with lessons, tests, notebook work, flashcards, and speaking
-              practice. The curriculum begins in October 2026 and runs through October 2028.
+              practice. The curriculum begins in September 2026 and runs through October 2028.
             </p>
           </div>
           <button
@@ -702,6 +711,12 @@ export function App() {
                 <h4>Practice</h4>
                 <ul>
                   {lesson.practice.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <h4>Activities</h4>
+                <ul>
+                  {lesson.activities.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
@@ -1000,7 +1015,7 @@ export function App() {
                       <button onClick={() => setRevealedCard(isRevealed ? null : card.id)} type="button">
                         {isRevealed ? "Hide" : "Reveal"}
                       </button>
-                      <button onClick={() => gradeCard(card.id, false)} type="button">Again</button>
+                      <button onClick={() => gradeCard(card.id, false)} type="button">Don't know</button>
                       <button onClick={() => gradeCard(card.id, true)} type="button">Know it</button>
                     </div>
                     <small>Box {cardState[card.id]?.box ?? 0} of 3</small>
@@ -1008,6 +1023,30 @@ export function App() {
                 );
               })}
             </div>
+            <section className="review-bank">
+              <h3>Weekly Review Cards</h3>
+              <p className="section-copy">
+                Cards marked "Don't know" appear here from every semester, grouped by category. Use this list during
+                Wednesday review before returning cards to normal practice.
+              </p>
+              {weeklyReviewCards.length === 0 ? (
+                <p className="empty-state">No cards are marked for weekly review.</p>
+              ) : (
+                Object.entries(weeklyReviewByCategory).map(([category, cards]) => (
+                  <article key={category}>
+                    <h4>{category}</h4>
+                    <div className="review-chip-list">
+                      {cards.map((card) => (
+                        <span key={card.id}>
+                          <strong>{card.front}</strong>
+                          {card.back} · {card.track}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))
+              )}
+            </section>
           </section>
         )}
 
