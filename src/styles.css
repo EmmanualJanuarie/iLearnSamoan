@@ -401,8 +401,7 @@ meter {
 
 .lesson-workspace {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
   margin: 18px 0;
 }
 
@@ -474,6 +473,32 @@ meter {
   color: #f7f4ef;
   background: #173236;
   border-color: #173236;
+}
+
+.homework-toggle {
+  margin-top: 22px;
+  color: #173236;
+  background: #e7c67b;
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.homework-panel {
+  border-top: 1px solid #e7ddcf;
+  margin-top: 20px;
+  padding-top: 18px;
+}
+
+.homework-panel ol {
+  margin: 10px 0 0;
+  padding-left: 22px;
+}
+
+.homework-panel li {
+  margin-bottom: 12px;
 }
 
 .lesson-card h4 {
@@ -557,32 +582,6 @@ meter {
   background: #f5ead8;
   border-radius: 8px;
   padding: 10px;
-}
-
-.time-guidance {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  border: 1px solid #ddd4c6;
-  border-radius: 8px;
-  background: #fffaf2;
-  padding: 12px;
-  margin-bottom: 16px;
-}
-
-.time-guidance strong {
-  flex-basis: 100%;
-  color: #173236;
-}
-
-.time-guidance span {
-  border: 1px solid #d5caba;
-  border-radius: 999px;
-  color: #526064;
-  background: #fffdf8;
-  padding: 5px 9px;
-  font-size: 13px;
 }
 
 .week-grid {

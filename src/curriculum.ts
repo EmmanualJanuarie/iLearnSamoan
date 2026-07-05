@@ -14,6 +14,7 @@ export type Module = {
   outcomes: string[];
   lessons: Lesson[];
   assignment: string;
+  homework: string[];
 };
 
 export type Exam = {
@@ -43,9 +44,9 @@ export type Flashcard = {
 
 const foundationNotes = {
   intro: [
-    "Samoan, or Gagana Samoa, is a Polynesian language spoken in Samoa, American Samoa, and Samoan communities around the world.",
-    "The language is closely tied to family, church, village life, respect, oratory, and the cultural system often called fa'a Samoa.",
-    "Modern written Samoan uses the Latin alphabet. Careful writing may include macrons for long vowels and a turned comma or apostrophe for the glottal stop.",
+    "This course starts with the sound system, alphabet, reading, writing, and basic vocabulary before moving into grammar.",
+    "After grammar, the course moves into sentence construction, writing, translation, listening, speaking, and real conversation.",
+    "The final stage focuses on cultural understanding, formal speech awareness, everyday conversation, and practical preparation for Samoa.",
   ],
   alphabet: [
     "Core letters: a, e, i, o, u, f, g, l, m, n, p, s, t, v. H, k, and r are mainly used in loan words.",
@@ -188,53 +189,43 @@ function createLessons(id: number, title: string): Lesson[] {
 
   return [
     {
-      title: "Lesson 1 - Learn",
-      objective: `Understand the core idea of ${title.toLowerCase()}.`,
+      title: `${title} Lesson`,
+      objective:
+        id === 1
+          ? "Understand how this course will work and what parts of Samoan you will study."
+          : `Understand and use ${title.toLowerCase()} in accurate beginner-to-intermediate Samoan study.`,
       content: details,
       activities: [
-        "Copy the key examples into your notebook and underline the Samoan structure.",
-        "Say each example aloud slowly, then again at normal speed.",
-        "Write one question you would ask a tutor or native speaker about this topic.",
+        "Read the examples aloud and copy them into your notebook.",
+        "Create five original examples that use this module's topic.",
+        "Record one short spoken attempt and save one correction in your mistake log.",
       ],
-      practice: ["Write a one-page note in your own words.", "Make 10 flashcards.", "Read all examples aloud three times."],
+      practice: [
+        "Use short accurate sentences before attempting longer ones.",
+        "Check spelling, glottal stops, and vowel length where your source provides them.",
+        "Ask a tutor or native speaker to review pronunciation and natural phrasing when possible.",
+      ],
     },
-    {
-      title: "Lesson 2 - Pattern Practice",
-      objective: `Use ${title.toLowerCase()} in controlled drills.`,
-      content: [
-        "Samoan practice should move from model sentences to substitutions, then to original speech.",
-        "When writing, pay attention to word boundaries, glottal stops, vowel length, and repeated particles.",
-        "Short accurate sentences are better than long sentences with unchecked grammar.",
-      ],
-      activities: [
-        "Make a substitution table with five nouns, five verbs, and five time or question words.",
-        "Create ten sentence pairs: English prompt on the left, Samoan attempt on the right.",
-        "Mark every uncertain word with a question mark for later correction.",
-      ],
-      practice: ["Create 15 sentence substitutions.", "Translate 10 short English prompts.", "Correct mistakes in a red-pen pass."],
-    },
-    {
-      title: "Lesson 3 - Production",
-      objective: `Produce original Samoan using ${title.toLowerCase()}.`,
-      content: ["Move from recognition to output.", "Use your own life, family, school, work, and travel plans as subject matter.", "Speak before writing when possible."],
-      activities: [
-        "Record yourself speaking for 60-90 seconds without reading full sentences.",
-        "Write a cleaned-up version of what you said.",
-        "Add at least three corrected phrases to your mistake log.",
-      ],
-      practice: ["Record a 60-second spoken response.", "Write 8 original sentences.", "Ask a speaker, tutor, or later AI review pass to mark errors."],
-    },
-    {
-      title: "Lesson 4 - Review",
-      objective: `Review ${title.toLowerCase()} until it is usable without notes.`,
-      content: ["Retest old cards.", "Mix the topic with older modules.", "Keep only the mistakes in your weekly review list."],
-      activities: [
-        "Take a closed-notes mini test.",
-        "Sort mistakes into pronunciation, vocabulary, grammar, and culture.",
-        "Choose the weakest item and create a new drill for next week.",
-      ],
-      practice: ["Take a 15-minute quiz.", "Rewrite weak answers.", "Add three items to the next monthly test bank."],
-    },
+  ];
+}
+
+function createHomework(id: number, title: string): string[] {
+  if (id === 1) {
+    return [
+      "Page 1 - Challenge for you: write a one-page personal learning contract explaining why you want to learn Samoan and what fluency will mean for you.",
+      "Page 2 - Challenge for you: map the full course from September 2026 to October 2028 and write one goal for each semester.",
+      "Page 3 - Challenge for you: create a study routine for one normal week, including review, speaking, listening, and rest.",
+      "Page 4 - Challenge for you: list the tools you will use: notebook, flashcards, recordings, native speaker practice, and correction log.",
+      "Page 5 - Challenge for you: write a baseline reflection in English: what you already know, what feels difficult, and how you will measure progress.",
+    ];
+  }
+
+  return [
+    `Page 1 - Challenge for you: write a clear explanation of ${title.toLowerCase()} in your own words, then add five Samoan examples from the lesson or a trusted source.`,
+    `Page 2 - Challenge for you: create a two-column drill for ${title.toLowerCase()} with 15 English prompts and your Samoan attempts.`,
+    "Page 3 - Challenge for you: write ten original sentences about your real life. Keep them short, accurate, and easy to check.",
+    "Page 4 - Challenge for you: record yourself reading your best five sentences, then write down every pronunciation or confidence issue you notice.",
+    "Page 5 - Challenge for you: correct the work, add at least five weak items to flashcards, and write a short reflection on what to review next week.",
   ];
 }
 
@@ -249,6 +240,7 @@ export const modules: Module[] = modulePlan.map(([id, title, track, window]) => 
     `Use ${title.toLowerCase()} in speech or writing.`,
   ],
   lessons: createLessons(id, title),
+  homework: createHomework(id, title),
   assignment:
     id < 20
       ? "Build a notebook page, 20 flashcards, and 10 corrected example sentences."

@@ -218,6 +218,7 @@ function weekPlan(items: Module[]): CalendarDay[] {
 export function App() {
   const [selectedId, setSelectedId] = useState(1);
   const [selectedLesson, setSelectedLesson] = useState(0);
+  const [showHomework, setShowHomework] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("lesson");
   const [query, setQuery] = useState("");
   const localProgress = useMemo(loadLocalProgress, []);
@@ -593,6 +594,7 @@ export function App() {
                   onClick={() => {
                     setSelectedId(module.id);
                     setSelectedLesson(0);
+                    setShowHomework(false);
                     setActiveTab("lesson");
                     setRevealedCard(null);
                   }}
@@ -670,24 +672,10 @@ export function App() {
             </section>
 
             <section className="lesson-workspace">
-              <div className="lesson-switcher">
-                {selected.lessons.map((item, index) => (
-                  <button
-                    className={selectedLesson === index ? "lesson-tab active" : "lesson-tab"}
-                    key={item.title}
-                    onClick={() => setSelectedLesson(index)}
-                    type="button"
-                  >
-                    {item.title}
-                  </button>
-                ))}
-              </div>
-
               <article className="lesson-card wide">
                 <div className="lesson-card-head">
                   <div>
                     <h3>{lesson.title}</h3>
-                    <p>{lesson.objective}</p>
                   </div>
                   <button
                     className={
@@ -702,15 +690,11 @@ export function App() {
                     {selectedLessonCompletions.includes(selectedLesson) ? "Lesson complete" : "Complete lesson"}
                   </button>
                 </div>
-                <h4>Teach</h4>
+                <h4>Purpose</h4>
+                <p>{lesson.objective}</p>
+                <h4>Examples / Using It</h4>
                 <ul>
                   {lesson.content.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <h4>Practice</h4>
-                <ul>
-                  {lesson.practice.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
@@ -720,8 +704,19 @@ export function App() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-                <h4>Submission</h4>
-                <p>{selected.assignment}</p>
+                <button className="homework-toggle" onClick={() => setShowHomework((value) => !value)} type="button">
+                  {showHomework ? "Hide homework" : "Homework"}
+                </button>
+                {showHomework && (
+                  <section className="homework-panel">
+                    <h4>Homework: Challenge for you</h4>
+                    <ol>
+                      {selected.homework.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ol>
+                  </section>
+                )}
               </article>
             </section>
           </>
@@ -791,13 +786,6 @@ export function App() {
                 This week is generated from the current or next scheduled module. Formal study is Monday to Friday;
                 Saturday and Sunday are off unless you want light exposure.
               </p>
-              <div className="time-guidance">
-                <strong>Daily time target per active module: 60-90 minutes.</strong>
-                <span>20 min lesson review</span>
-                <span>20 min drills or flashcards</span>
-                <span>20 min writing or speaking output</span>
-                <span>Optional 30 min correction, audio, or native-speaker practice</span>
-              </div>
               <div className="week-grid">
                 {calendarDays.map((item) => (
                   <article className={`day-card ${item.type.toLowerCase()}`} key={item.day}>
