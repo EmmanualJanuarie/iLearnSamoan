@@ -48,7 +48,7 @@ type ProgressData = {
   lessonCompletions: LessonCompletionState;
 };
 
-const currentDate = new Date("2026-07-04T00:00:00");
+const currentDate = new Date("2026-08-04T00:00:00");
 const storage = {
   progress: "ilearn-samoan-progress",
   notes: "ilearn-samoan-notes",
@@ -139,16 +139,6 @@ function getStatus(window: string) {
 function monthEndDate(value: string) {
   const start = monthDate(value);
   return new Date(start.getFullYear(), start.getMonth() + 1, 0);
-}
-
-function semesterFinalDate(track: string) {
-  const related = semesterExams(track);
-  if (related.length === 0) return monthEndDate("October 2028");
-  return related.map((exam) => monthEndDate(exam.month)).sort((a, b) => b.getTime() - a.getTime())[0];
-}
-
-function isReportAvailable(track: string) {
-  return currentDate > semesterFinalDate(track);
 }
 
 function modulesForPlanning() {
@@ -284,10 +274,10 @@ export function App() {
       modules: items,
       completeCount,
       percent,
-      grade: isReportAvailable(track) ? gradeFromPercent(percent) : "Locked",
+      grade: gradeFromPercent(percent),
       tests,
-      finalDate: semesterFinalDate(track),
-      isAvailable: isReportAvailable(track),
+      finalDate: monthEndDate("October 2028"),
+      isAvailable: true,
       status: items.some((module) => getStatus(module.window) === "Now")
         ? "Current"
         : items.every((module) => getStatus(module.window) === "Past")
@@ -295,14 +285,6 @@ export function App() {
           : "Upcoming",
     };
   });
-  const trackOrder = Object.keys(grouped);
-
-  function isTrackUnlocked(track: string) {
-    const index = trackOrder.indexOf(track);
-    if (index <= 0) return true;
-    const previousTracks = trackOrder.slice(0, index);
-    return previousTracks.every((previousTrack) => grouped[previousTrack].every((module) => completed.includes(module.id)));
-  }
 
   function toggleComplete(id: number) {
     const module = modules.find((item) => item.id === id);
@@ -543,7 +525,7 @@ export function App() {
           <GraduationCap size={26} />
           <div>
             <h1>iLearn Samoan</h1>
-            <p>September 2026 to October 2028</p>
+            <p>August 2026 to October 2028</p>
           </div>
         </div>
 
@@ -598,11 +580,9 @@ export function App() {
             <section key={track}>
               <h2>{track}</h2>
               {items.map((module) => {
-                const locked = !isTrackUnlocked(module.track);
                 return (
                   <button
-                    className={`${module.id === selected.id ? "module-button active" : "module-button"} ${locked ? "locked" : ""}`}
-                    disabled={locked}
+                    className={module.id === selected.id ? "module-button active" : "module-button"}
                     key={module.id}
                     onClick={() => {
                       setSelectedId(module.id);
@@ -611,13 +591,13 @@ export function App() {
                       setActiveTab("lesson");
                       setRevealedCard(null);
                     }}
-                    title={locked ? "Finish the previous semester first" : module.title}
+                    title={module.title}
                     type="button"
                   >
                     <span>{module.id.toString().padStart(2, "0")}</span>
                     <div>
                       <strong>{module.title}</strong>
-                      <small>{locked ? "Locked until previous semester is complete" : module.window}</small>
+                      <small>{module.window}</small>
                     </div>
                   </button>
                 );
@@ -634,7 +614,8 @@ export function App() {
             <h2>{selected.title}</h2>
             <p>
               A private school-style Samoan course with lessons, tests, notebook work, flashcards, and speaking
-              practice. The curriculum begins in September 2026 and runs through October 2028.
+              practice. The curriculum begins in August 2026, keeps every semester accessible, and works toward being
+              well informed by October 2028.
             </p>
           </div>
           <button
@@ -905,8 +886,8 @@ export function App() {
               <h3>Semester Report Cards</h3>
             </div>
             <p className="section-copy">
-              Report cards unlock only after the semester has ended. Until then, you can see the semester status and
-              requirements, but the grade is held back like a real school report.
+              Report cards stay accessible for every semester, so you can review progress at any time while working
+              toward the October 2028 learning goal.
             </p>
             <div className="report-grid">
               {reportCards.map((card) => (
@@ -916,7 +897,7 @@ export function App() {
                       <span>{card.status}</span>
                       <h4>{card.track}</h4>
                     </div>
-                    <strong className={card.isAvailable ? "" : "locked-grade"}>{card.grade}</strong>
+                    <strong>{card.grade}</strong>
                   </div>
                   {card.isAvailable ? (
                     <>

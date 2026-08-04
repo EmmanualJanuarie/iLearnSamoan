@@ -101,11 +101,11 @@ const foundationNotes = {
 };
 
 const modulePlan: Array<[number, string, string, string]> = [
-  [1, "Introduction to Samoan", "Semester 1 - The Language", "Sep 2026"],
-  [2, "Alphabet", "Semester 1 - The Language", "Oct 2026"],
-  [3, "Pronunciation and Sounds", "Semester 1 - The Language", "Nov 2026"],
-  [4, "Long Vowels and Glottal Stop", "Semester 1 - The Language", "Dec 2026"],
-  [5, "Syllables and Stress", "Semester 1 - The Language", "Jan-Feb 2027"],
+  [1, "Introduction to Samoan", "Semester 1 - The Language", "Aug 2026"],
+  [2, "Alphabet", "Semester 1 - The Language", "Sep 2026"],
+  [3, "Pronunciation and Sounds", "Semester 1 - The Language", "Oct 2026"],
+  [4, "Long Vowels and Glottal Stop", "Semester 1 - The Language", "Nov 2026"],
+  [5, "Syllables and Stress", "Semester 1 - The Language", "Dec 2026-Feb 2027"],
   [6, "Reading Samoan Words", "Semester 2 - Grammar", "Mar 2027"],
   [7, "Writing Samoan Carefully", "Semester 2 - Grammar", "Mar 2027"],
   [8, "Core Vocabulary Sets", "Semester 2 - Grammar", "Apr 2027"],
@@ -628,7 +628,7 @@ function createAnswerKey(id: number, title: string): Module["answerKey"] {
         "1.H1 Answer: alphabet, sounds, syllables, words, grammar, sentences, listening, speaking.",
         "1.H2 Answer: Gagana Samoa means the Samoan language.",
         "1.H3 Sample answer: cards, notebook, speaking recorder.",
-        "1.H4 Answer: September 2026 to October 2028.",
+        "1.H4 Answer: August 2026 to October 2028.",
         "1.H5 Any clear personal reasons are acceptable.",
       ],
     };
