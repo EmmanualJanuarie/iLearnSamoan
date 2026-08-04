@@ -2,20 +2,20 @@
 
 A personal school-style Samoan learning app built with React, TypeScript, and Vite.
 
-The private curriculum runs from August 2026 through October 2028 and is organized like a long-form language course:
+The private curriculum is open-paced and organized like a long-form language course:
 
-- Foundation year: alphabet, pronunciation, reading, writing, vocabulary, and grammar.
-- Year two: sentence construction, writing, paragraphs, reflections, and translation.
-- Year three: listening, speaking, conversation, storytelling, and thinking in Samoan.
+- Foundation phase: alphabet, pronunciation, reading, writing, vocabulary, and grammar.
+- Sentence and writing phases: sentence construction, writing, paragraphs, reflections, and translation.
+- Listening and speaking phases: listening, speaking, conversation, storytelling, and thinking in Samoan.
 - Final stage: books, media, humor, culture, formal speech, everyday conversation, and Samoa readiness.
 
 The app includes:
 
 - 70 modules with one structured lesson per module.
 - Each lesson includes purpose, detailed explanation, examples, real-life application, activities, assessment, summary, and a five-part homework challenge.
-- A month-based test calendar.
+- A checkpoint-based assessment planner.
 - Interactive test questions with answer keys and rubrics.
-- A weekly study calendar with study days, review days, test prep, and off days.
+- A weekly study planner with study days, review days, test prep, and off days.
 - Weekly native-speaker practice with preparation, conversation, and follow-up tasks.
 - Daily time guidance for each active module.
 - Lesson completion gates before a module can be marked complete.

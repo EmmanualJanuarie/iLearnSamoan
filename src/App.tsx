@@ -30,7 +30,7 @@ import { allowedEmail, isSupabaseConfigured, supabase } from "./supabase";
 type Tab = "lesson" | "tests" | "calendar" | "report" | "notebook" | "cards" | "speaking" | "answers";
 type NoteState = Record<string, string>;
 type AnswerState = Record<string, string>;
-type CardState = Record<string, { box: number; lastReviewed?: string; needsReview?: boolean }>;
+type CardState = Record<string, { box: number; needsReview?: boolean }>;
 type LessonCompletionState = Record<string, number[]>;
 type TabConfig = [Tab, LucideIcon, string];
 type CalendarDay = {
@@ -48,7 +48,6 @@ type ProgressData = {
   lessonCompletions: LessonCompletionState;
 };
 
-const currentDate = new Date("2026-08-04T00:00:00");
 const storage = {
   progress: "ilearn-samoan-progress",
   notes: "ilearn-samoan-notes",
@@ -61,7 +60,7 @@ const storage = {
 const tabs: TabConfig[] = [
   ["lesson", BookOpen, "Lesson"],
   ["tests", ClipboardCheck, "Tests"],
-  ["calendar", CalendarDays, "Calendar"],
+  ["calendar", CalendarDays, "Planner"],
   ["report", ScrollText, "Report"],
   ["notebook", NotebookPen, "Notebook"],
   ["cards", Library, "Cards"],
@@ -79,16 +78,16 @@ function gradeFromPercent(percent: number) {
 
 function semesterExams(track: string) {
   const semesterNumber = track.match(/Semester (\d)/)?.[1];
-  if (!semesterNumber) return exams.filter((exam) => exam.month === "October 2028");
+  if (!semesterNumber) return exams.filter((exam) => exam.checkpoint === "Mastery checkpoint");
   const examMap: Record<string, string[]> = {
-    "1": ["November 2026", "February 2027"],
-    "2": ["May 2027", "August 2027"],
-    "3": ["November 2027", "February 2028"],
-    "4": ["May 2028", "July 2028"],
-    "5": ["August 2028"],
-    "6": ["September 2028"],
+    "1": ["Foundation checkpoint"],
+    "2": ["Grammar checkpoint"],
+    "3": ["Sentence checkpoint"],
+    "4": ["Writing checkpoint"],
+    "5": ["Listening checkpoint"],
+    "6": ["Speaking checkpoint"],
   };
-  return exams.filter((exam) => examMap[semesterNumber]?.includes(exam.month));
+  return exams.filter((exam) => examMap[semesterNumber]?.includes(exam.checkpoint));
 }
 
 function passwordIssues(password: string) {
@@ -121,43 +120,13 @@ function loadLocalProgress(): ProgressData {
   };
 }
 
-function monthDate(value: string) {
-  const [month, year] = value.split(/[- ]/);
-  const monthIndex = new Date(`${month} 1, ${year}`).getMonth();
-  return new Date(Number(year), monthIndex, 1);
-}
-
-function getStatus(window: string) {
-  const firstMonth = window.split("-")[0].trim();
-  const year = window.match(/\d{4}/)?.[0] ?? "2026";
-  const date = monthDate(`${firstMonth} ${year}`);
-  if (date < new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)) return "Past";
-  if (date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) return "Now";
-  return "Upcoming";
-}
-
-function monthEndDate(value: string) {
-  const start = monthDate(value);
-  return new Date(start.getFullYear(), start.getMonth() + 1, 0);
-}
-
-function modulesForPlanning() {
-  const now = modules.filter((module) => getStatus(module.window) === "Now");
-  if (now.length > 0) return now.slice(0, 3);
-  return modules.filter((module) => getStatus(module.window) === "Upcoming").slice(0, 3);
-}
-
-function nextExam() {
-  return exams
-    .map((exam) => ({ exam, date: monthEndDate(exam.month) }))
-    .filter(({ date }) => date >= currentDate)
-    .sort((a, b) => a.date.getTime() - b.date.getTime())[0]?.exam;
+function moduleStatus(module: Module, completed: number[]) {
+  return completed.includes(module.id) ? "Complete" : "Open";
 }
 
 function weekPlan(items: Module[]): CalendarDay[] {
   const primary = items[0] ?? modules[0];
   const secondary = items[1] ?? primary;
-  const upcomingExam = nextExam();
   return [
     {
       day: "Monday",
@@ -187,10 +156,8 @@ function weekPlan(items: Module[]): CalendarDay[] {
     {
       day: "Friday",
       type: "Test",
-      title: upcomingExam ? `${upcomingExam.title} prep` : "Weekly quiz",
-      detail: upcomingExam
-        ? `Prepare for ${upcomingExam.month}. Answer at least two exam prompts.`
-        : "Take the interactive test bank and correct weak answers.",
+      title: "Checkpoint prep",
+      detail: "Take the interactive test bank and correct weak answers.",
     },
     {
       day: "Saturday",
@@ -234,7 +201,7 @@ export function App() {
 
   const selected = modules.find((module) => module.id === selectedId) ?? modules[0];
   const lesson = selected.lessons[selectedLesson] ?? selected.lessons[0];
-  const planningModules = modulesForPlanning();
+  const planningModules = modules.filter((module) => !completed.includes(module.id)).slice(0, 3);
   const calendarDays = weekPlan(planningModules);
 
   const grouped = useMemo<Record<string, Module[]>>(() => {
@@ -276,13 +243,8 @@ export function App() {
       percent,
       grade: gradeFromPercent(percent),
       tests,
-      finalDate: monthEndDate("October 2028"),
       isAvailable: true,
-      status: items.some((module) => getStatus(module.window) === "Now")
-        ? "Current"
-        : items.every((module) => getStatus(module.window) === "Past")
-          ? "Past"
-          : "Upcoming",
+      status: percent === 100 ? "Complete" : completeCount > 0 ? "In Progress" : "Open",
     };
   });
 
@@ -412,7 +374,7 @@ export function App() {
     const nextBox = remembered ? Math.min((cardState[cardId]?.box ?? 0) + 1, 3) : 0;
     const next = {
       ...cardState,
-      [cardId]: { box: nextBox, lastReviewed: new Date().toISOString(), needsReview: !remembered },
+      [cardId]: { box: nextBox, needsReview: !remembered },
     };
     setCardState(next);
     saveJson(storage.cards, next);
@@ -525,7 +487,7 @@ export function App() {
           <GraduationCap size={26} />
           <div>
             <h1>iLearn Samoan</h1>
-            <p>August 2026 to October 2028</p>
+            <p>Open-paced Samoan learning</p>
           </div>
         </div>
 
@@ -614,8 +576,7 @@ export function App() {
             <h2>{selected.title}</h2>
             <p>
               A private school-style Samoan course with lessons, tests, notebook work, flashcards, and speaking
-              practice. The curriculum begins in August 2026, keeps every semester accessible, and works toward being
-              well informed by October 2028.
+              practice. Every semester stays accessible, and the goal is to become well informed at your own pace.
             </p>
           </div>
           <button
@@ -636,7 +597,7 @@ export function App() {
 
         <div className="module-meta">
           <span>{selected.window}</span>
-          <span>{getStatus(selected.window)}</span>
+          <span>{moduleStatus(selected, completed)}</span>
           <span>Module {selected.id} of 70</span>
           <span>
             {selectedLessonCompletions.length} of {selected.lessons.length} lessons complete
@@ -757,11 +718,11 @@ export function App() {
             </div>
 
             <div className="panel">
-              <h3>Assessment Calendar</h3>
+              <h3>Assessment Planner</h3>
               <div className="exam-list compact">
                 {exams.map((exam) => (
                   <article key={exam.title}>
-                    <span>{exam.month}</span>
+                    <span>{exam.checkpoint}</span>
                     <h4>{exam.title}</h4>
                     <p>Modules {exam.modules}</p>
                     <ul>
@@ -781,11 +742,11 @@ export function App() {
             <section className="panel">
               <div className="panel-title">
                 <CalendarDays size={20} />
-                <h3>Weekly Study Calendar</h3>
+                <h3>Weekly Study Planner</h3>
               </div>
               <p className="section-copy">
-                This week is generated from the current or next scheduled module. Formal study is Monday to Friday;
-                Saturday and Sunday are off unless you want light exposure.
+                This routine is generated from your next open modules. Formal study is Monday to Friday; Saturday and
+                Sunday are off unless you want light exposure.
               </p>
               <div className="week-grid">
                 {calendarDays.map((item) => (
@@ -801,7 +762,7 @@ export function App() {
 
             <section className="two-column">
               <div className="panel">
-                <h3>Current Focus</h3>
+                <h3>Next Focus</h3>
                 <div className="calendar-grid">
                   {planningModules.map((module) => (
                     <article key={module.id}>
@@ -818,7 +779,7 @@ export function App() {
                 <div className="exam-list compact">
                   {exams.map((exam) => (
                     <article key={exam.title}>
-                      <span>{exam.month}</span>
+                      <span>{exam.checkpoint}</span>
                       <h4>{exam.title}</h4>
                       <p>Modules {exam.modules}</p>
                     </article>
@@ -887,7 +848,7 @@ export function App() {
             </div>
             <p className="section-copy">
               Report cards stay accessible for every semester, so you can review progress at any time while working
-              toward the October 2028 learning goal.
+              toward the learning goal.
             </p>
             <div className="report-grid">
               {reportCards.map((card) => (
@@ -917,14 +878,7 @@ export function App() {
                     </>
                   ) : (
                     <div className="locked-report">
-                      <p>
-                        Available after {card.finalDate.toLocaleDateString(undefined, {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                        .
-                      </p>
+                      <p>Report details are available as you complete module work.</p>
                       <p>
                         Complete all lessons, notebook work, mistake corrections, flashcard reviews, and semester tests
                         before this report is issued.
@@ -936,7 +890,7 @@ export function App() {
                     {card.tests.length > 0 ? (
                       card.tests.map((exam) => (
                         <p key={exam.title}>
-                          <strong>{exam.month}</strong> · {exam.title}
+                          <strong>{exam.checkpoint}</strong> · {exam.title}
                         </p>
                       ))
                     ) : (
